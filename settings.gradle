@@ -1,0 +1,27 @@
+pluginManagement {
+    plugins {
+        id 'java'
+        id 'groovy'
+        id 'scala'
+        id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+        id 'org.jlleitschuh.gradle.ktlint' version '9.3.0'
+        id 'cz.alenkacz.gradle.scalafmt' version '1.14.0'
+        id 'com.diffplug.gradle.spotless' version '4.0.0'
+        id 'com.gradle.enterprise' version '3.1.1'
+    }
+}
+
+plugins {
+    id 'com.gradle.enterprise'
+}
+
+rootProject.name = 'multilanguage-test'
+
+include ':scala-test'
+project(':scala-test').name = 'multilanguage-scala-test'
+include ':kotlin-test'
+project(':kotlin-test').name = 'multilanguage-kotlin-test'
+include ':java-test'
+project(':java-test').name = 'multilanguage-java-test'
+include ':main'
+project(':main').name = 'multilanguage-main-test'

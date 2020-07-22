@@ -1,0 +1,84 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'scala'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jlleitschuh.gradle.ktlint'
+    id 'cz.alenkacz.gradle.scalafmt'
+    id 'com.diffplug.gradle.spotless'
+}
+
+group 'org.leysoft'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'scala'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    apply plugin: 'cz.alenkacz.gradle.scalafmt'
+    apply plugin: 'com.diffplug.gradle.spotless'
+
+    configurations {
+        scalaCompilerPlugins
+    }
+
+    spotless {
+        java {
+            target fileTree('.') {
+                include '**/*.java'
+                exclude '**/build/**'
+            }
+            googleJavaFormat()
+        }
+        groovy {
+            target fileTree('.') {
+                include '**/*.groovy'
+                exclude '**/build/**'
+            }
+            greclipse()
+        }
+    }
+
+    afterEvaluate {
+        tasks.getByName('spotlessCheck')
+                .dependsOn(tasks.getByName('spotlessApply'))
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation "org.codehaus.groovy:groovy-all:3.0.0"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+        implementation "org.scala-lang:scala-library:2.13.0"
+
+        testImplementation "org.scalatest:scalatest_2.13:3.2.0"
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+
+        scalaCompilerPlugins "org.typelevel:kind-projector_2.13.0:0.11.0"
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    tasks.withType(ScalaCompile) {
+        scalaCompileOptions.additionalParameters = [
+                "-feature",
+                "-deprecation",
+                "-unchecked",
+                "-language:postfixOps",
+                "-language:higherKinds"
+        ]
+    }
+}
