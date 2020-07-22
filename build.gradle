@@ -8,11 +8,13 @@ plugins {
     id 'com.diffplug.gradle.spotless'
 }
 
-group 'org.leysoft'
-version '1.0-SNAPSHOT'
+allprojects {
+    group 'org.leysoft'
+    version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
 }
 
 subprojects {
@@ -48,10 +50,6 @@ subprojects {
     afterEvaluate {
         tasks.getByName('spotlessCheck')
                 .dependsOn(tasks.getByName('spotlessApply'))
-    }
-
-    repositories {
-        mavenCentral()
     }
 
     dependencies {
